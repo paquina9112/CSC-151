@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
 
 public class RavensTeamSelector {
 
@@ -20,15 +22,20 @@ public class RavensTeamSelector {
     public static void main(String[] args) {
         List<Player> roster = new ArrayList<>();
         roster.add(new Player("Lamar Jackson", "QB"));
+        roster.add(new Player("Tyler Huntley", "QB"));
         roster.add(new Player("Mark Andrews", "TE"));
+        roster.add(new Player("Isaish Likely", "TE"));
+        roster.add(new Player("Derrick Henry", "RB"));
         roster.add(new Player("Tyler Linderbaum", "C"));
         roster.add(new Player("Marlon Humphrey", "CB"));
-        roster.add(new Player("Odafe Oweh", "LB"));
+        roster.add(new Player("DeAndre Hopkins", "WR"));
         roster.add(new Player("Zay Flowers", "WR"));
         roster.add(new Player("Kyle Hamilton", "S"));
+        roster.add(new Player("Roger Rosengarten", "T"));
+        roster.add(new Player("Kyle Van Noy", "OLB"));
         roster.add(new Player("Rashod Bateman", "WR"));
         roster.add(new Player("Roquan Smith", "LB"));
-        roster.add(new Player("Justin Tucker", "K"));
+        roster.add(new Player("Tyler Loop", "K"));
 
         List<Player> selectedTeam = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
