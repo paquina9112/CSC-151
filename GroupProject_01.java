@@ -1,10 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class RavensTeamSelectorGUI extends JFrame {
+public class GroupProject_01 extends JFrame {
 
     static class Player {
         String name;
@@ -27,7 +25,7 @@ public class RavensTeamSelectorGUI extends JFrame {
     private JList<Player> teamList;
     private JLabel teamCountLabel;
 
-    public RavensTeamSelectorGUI() {
+    public GroupProject_01() {
         setTitle("Baltimore Ravens 2026 Team Selector");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 500);
@@ -275,7 +273,7 @@ public class RavensTeamSelectorGUI extends JFrame {
         }
 
         SwingUtilities.invokeLater(() -> {
-            RavensTeamSelectorGUI gui = new RavensTeamSelectorGUI();
+            GroupProject_01 gui = new GroupProject_01();
             gui.setVisible(true);
         });
     }
