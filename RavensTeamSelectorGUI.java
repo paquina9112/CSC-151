@@ -119,7 +119,7 @@ public class RavensTeamSelectorGUI extends JFrame {
         rosterModel.addElement(new Player("Kyle Van Noy", "OLB"));
         rosterModel.addElement(new Player("Rashod Bateman", "WR"));
         rosterModel.addElement(new Player("Roquan Smith", "LB"));
-        rosterModel.addElement(new Player("Justin Tucker", "K"));
+        rosterModel.addElement(new Player("Tyler Loop", "K"));
     }
 
     private JPanel createListPanel(String title, DefaultListModel<Player> model, boolean isRoster) {
