@@ -1,8 +1,11 @@
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GroupProject_02 extends JFrame {
+public class JavaCode_GroupProject_01_HindsChristopher extends JFrame {
 
     static class Player {
         String name;
@@ -25,57 +28,69 @@ public class GroupProject_02 extends JFrame {
     private JList<Player> teamList;
     private JLabel teamCountLabel;
 
-    public GroupProject_02() {
+    public JavaCode_GroupProject_01_HindsChristopher() {
         setTitle("Baltimore Ravens 2026 Team Selector");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 500);
         setLocationRelativeTo(null);
 
+        // Initialize models
         rosterModel = new DefaultListModel<>();
         teamModel = new DefaultListModel<>();
 
+        // Add players to roster
         initializeRoster();
 
+        // Create main panel with padding
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
         mainPanel.setBackground(new Color(36, 28, 79)); // Ravens purple
 
+        // Header
         JLabel headerLabel = new JLabel("Baltimore Ravens 2026 Team Selector", SwingConstants.CENTER);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 24));
         headerLabel.setForeground(new Color(198, 159, 60)); // Ravens gold
         headerLabel.setBorder(new EmptyBorder(0, 0, 10, 0));
         mainPanel.add(headerLabel, BorderLayout.NORTH);
 
+        // Center panel with two lists
         JPanel centerPanel = new JPanel(new GridLayout(1, 2, 15, 0));
         centerPanel.setOpaque(false);
 
+        // Roster panel (left)
         JPanel rosterPanel = createListPanel("Available Players", rosterModel, true);
         centerPanel.add(rosterPanel);
 
+        // Team panel (right)
         JPanel teamPanel = createListPanel("Your Team", teamModel, false);
         centerPanel.add(teamPanel);
 
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
+        // Bottom panel with buttons
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         bottomPanel.setOpaque(false);
 
         JButton addButton = createStyledButton("Add to Team >>");
         JButton removeButton = createStyledButton("<< Remove");
         JButton clearButton = createStyledButton("Clear Team");
+        JButton saveButton = createStyledButton("Save Team");
 
         addButton.addActionListener(e -> addSelectedPlayer());
         removeButton.addActionListener(e -> removeSelectedPlayer());
         clearButton.addActionListener(e -> clearTeam());
+        saveButton.addActionListener(e -> writeTeamToCSV());
 
         bottomPanel.add(removeButton);
         bottomPanel.add(addButton);
         bottomPanel.add(clearButton);
+        bottomPanel.add(saveButton);
 
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
 
+        // Double-click to add/remove
         rosterList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -94,32 +109,74 @@ public class GroupProject_02 extends JFrame {
     }
 
     private void initializeRoster() {
-        rosterModel.addElement(new Player("Lamar Jackson", "QB"));
-        rosterModel.addElement(new Player("Tyler Huntley", "QB"));
-        rosterModel.addElement(new Player("Mark Andrews", "TE"));
-        rosterModel.addElement(new Player("Isaiah Likely", "TE"));
-        rosterModel.addElement(new Player("Derrick Henry", "RB"));
-        rosterModel.addElement(new Player("Tyler Linderbaum", "C"));
-        rosterModel.addElement(new Player("Marlon Humphrey", "CB"));
-        rosterModel.addElement(new Player("DeAndre Hopkins", "WR"));
-        rosterModel.addElement(new Player("Zay Flowers", "WR"));
-        rosterModel.addElement(new Player("Kyle Hamilton", "S"));
-        rosterModel.addElement(new Player("Roger Rosengarten", "T"));
-        rosterModel.addElement(new Player("Kyle Van Noy", "OLB"));
-        rosterModel.addElement(new Player("Rashod Bateman", "WR"));
-        rosterModel.addElement(new Player("Roquan Smith", "LB"));
-        rosterModel.addElement(new Player("Tyler Loop", "K"));
+        readPlayersFromCSV();
+    }
+
+    // Written by: Christopher Hinds – This method reads player data from the CSV file.
+    private void readPlayersFromCSV() {
+        String csvFile = "ravens_roster.csv";
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            String line;
+            br.readLine(); // Skip the header line
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    String name = parts[0].trim();
+                    String position = parts[1].trim();
+                    rosterModel.addElement(new Player(name, position));
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                "Could not read roster file: " + e.getMessage()
+                + "\nPlease make sure ravens_roster.csv is in the program directory.",
+                "File Read Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Written by: Christopher Hinds – This method writes the selected team to a CSV file.
+    private void writeTeamToCSV() {
+        if (teamModel.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                "Your team is empty. Add players before saving.",
+                "Empty Team",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String csvFile = "my_team.csv";
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvFile))) {
+            bw.write("Name,Position");
+            bw.newLine();
+            for (int i = 0; i < teamModel.size(); i++) {
+                Player player = teamModel.get(i);
+                bw.write(player.name + "," + player.position);
+                bw.newLine();
+            }
+            JOptionPane.showMessageDialog(this,
+                "Team saved to " + csvFile + " successfully!",
+                "Team Saved",
+                JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                "Could not save team: " + e.getMessage(),
+                "File Write Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private JPanel createListPanel(String title, DefaultListModel<Player> model, boolean isRoster) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setOpaque(false);
 
+        // Title label
         JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titleLabel.setForeground(Color.WHITE);
         panel.add(titleLabel, BorderLayout.NORTH);
 
+        // List
         JList<Player> list = new JList<>(model);
         list.setFont(new Font("Arial", Font.PLAIN, 14));
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -134,11 +191,13 @@ public class GroupProject_02 extends JFrame {
             rosterList = list;
         } else {
             teamList = list;
+            // Add count label for team
             teamCountLabel = new JLabel("Players: 0", SwingConstants.CENTER);
             teamCountLabel.setForeground(new Color(198, 159, 60));
             teamCountLabel.setFont(new Font("Arial", Font.BOLD, 12));
             panel.add(teamCountLabel, BorderLayout.SOUTH);
         }
+
         return panel;
     }
 
@@ -213,6 +272,7 @@ public class GroupProject_02 extends JFrame {
         teamCountLabel.setText("Players: " + teamModel.size());
     }
 
+    // Custom cell renderer for player list
     private class PlayerCellRenderer extends DefaultListCellRenderer {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value,
@@ -224,6 +284,7 @@ public class GroupProject_02 extends JFrame {
                 Player player = (Player) value;
                 setText(player.toString());
 
+                // Color code by position
                 if (!isSelected) {
                     switch (player.position) {
                         case "QB":
@@ -250,13 +311,15 @@ public class GroupProject_02 extends JFrame {
     }
 
     public static void main(String[] args) {
+        // Set look and feel
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
+            // Use default look and feel
         }
 
         SwingUtilities.invokeLater(() -> {
-            GroupProject_01 gui = new GroupProject_01();
+            JavaCode_GroupProject_01_HindsChristopher gui = new JavaCode_GroupProject_01_HindsChristopher();
             gui.setVisible(true);
         });
     }
