@@ -2,10 +2,8 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class JavaCode_GroupProject_01_HindsChristopher extends JFrame {
+public class GroupProject_02 extends JFrame {
 
     static class Player {
         String name;
@@ -28,7 +26,7 @@ public class JavaCode_GroupProject_01_HindsChristopher extends JFrame {
     private JList<Player> teamList;
     private JLabel teamCountLabel;
 
-    public JavaCode_GroupProject_01_HindsChristopher() {
+    public GroupProject_02() {
         setTitle("Baltimore Ravens 2026 Team Selector");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 500);
@@ -215,6 +213,7 @@ public class JavaCode_GroupProject_01_HindsChristopher extends JFrame {
         return button;
     }
 
+    // Written by: Alexis Paquin - this method adds the selected player from the roster to the team, ensuring no duplicates and providing user feedback.
     private void addSelectedPlayer() {
         Player selected = rosterList.getSelectedValue();
         if (selected == null) {
@@ -319,7 +318,7 @@ public class JavaCode_GroupProject_01_HindsChristopher extends JFrame {
         }
 
         SwingUtilities.invokeLater(() -> {
-            JavaCode_GroupProject_01_HindsChristopher gui = new JavaCode_GroupProject_01_HindsChristopher();
+            GroupProject_02 gui = new GroupProject_02();
             gui.setVisible(true);
         });
     }
