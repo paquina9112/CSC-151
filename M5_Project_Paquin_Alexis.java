@@ -244,9 +244,9 @@ public class M5_Project_Paquin_Alexis {
             
             // Display header for the table
             System.out.println("\nPREVIOUS ESTIMATES:");
-            System.out.println("====================================");
+            System.out.println("=========================================================");
             System.out.printf("%-20s %-15s %-12s %-15s%n", "Project", "Work Hours", "Manpower Hrs", "Total Cost");
-            System.out.println("------------------------------------");
+            System.out.println("---------------------------------------------------------");
             
             // Read and display each estimate from file
             int count = 0;
@@ -265,7 +265,7 @@ public class M5_Project_Paquin_Alexis {
             reader.close();
             
             // Show summary
-            System.out.println("------------------------------------");
+            System.out.println("---------------------------------------------------------");
             System.out.println("Total: " + count + " estimates\n");
         } catch (IOException e) {
             System.out.println("Error reading: " + e.getMessage());
